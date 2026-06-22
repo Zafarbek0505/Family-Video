@@ -3,135 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Memories ❤️</title>
+<title>Family Memories</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-background:#000;
-font-family:Arial,Helvetica,sans-serif;
-overflow-x:hidden;
+body {
+  background: black;
+  font-family: Arial, sans-serif;
 }
 
-#start{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:black;
-z-index:9999;
-flex-direction:column;
-color:white;
+#start {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
-button{
-padding:18px 45px;
-font-size:22px;
-border:none;
-border-radius:50px;
-cursor:pointer;
-background:#ff4081;
-color:white;
+#start button {
+  font-size: 22px;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 40px;
+  background: white;
+  color: black;
 }
 
-button:hover{
-background:#ff1f68;
+video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  background: black;
+  display: none;
 }
 
-video{
-width:100%;
-height:100vh;
-object-fit:contain;
-background:black;
-display:none;
+#gallery {
+  display: none;
+  background: #111;
+  padding: 10px;
+  columns: 3 250px;
+  column-gap: 10px;
 }
 
-#gallery{
-display:none;
-padding:10px;
-columns:3 250px;
-column-gap:10px;
-background:#111;
-}
-
-#gallery img{
-width:100%;
-margin-bottom:10px;
-border-radius:12px;
-display:block;
-transition:.3s;
-cursor:pointer;
-}
-
-#gallery img:hover{
-transform:scale(1.02);
+#gallery img {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 12px;
 }
 </style>
-
 </head>
 
 <body>
 
 <div id="start">
-<h1 style="margin-bottom:25px;">❤️ Family Memories ❤️</h1>
-
-<button onclick="playVideo()">
-Open Album
-</button>
-
+  <button onclick="startVideo()">Open Video</button>
 </div>
 
-<video id="video" controls autoplay>
-<source src="video.mp5">
+<video id="video" playsinline>
+  <source src="video.mp5.mov" type="video/mp4">
 </video>
 
 <div id="gallery"></div>
 
 <script>
+const video = document.getElementById("video");
+const start = document.getElementById("start");
+const gallery = document.getElementById("gallery");
 
-const gallery=document.getElementById("gallery");
+function startVideo() {
+  start.style.display = "none";
+  video.style.display = "block";
+  video.play();
 
-for(let i=1;i<=105;i++){
-
-let img=document.createElement("img");
-
-img.src="images/"+i+".jpg";
-
-img.loading="lazy";
-
-gallery.appendChild(img);
-
+  if (video.requestFullscreen) {
+    video.requestFullscreen();
+  }
 }
 
-function playVideo(){
+video.onended = async function () {
+  video.style.display = "none";
+  gallery.style.display = "block";
 
-document.getElementById("start").style.display="none";
+  const res = await fetch("https://api.github.com/repos/Zafarbek0505/Family-Video/contents/images");
+  const files = await res.json();
 
-let v=document.getElementById("video");
-
-v.style.display="block";
-
-v.play();
-
-}
-
-document.getElementById("video").onended=function(){
-
-this.style.display="none";
-
-gallery.style.display="block";
-
-}
-
+  files
+    .filter(file => file.name.toLowerCase().endsWith(".jpg"))
+    .forEach(file => {
+      const img = document.createElement("img");
+      img.src = file.download_url;
+      img.loading = "lazy";
+      gallery.appendChild(img);
+    });
+};
 </script>
 
 </body>
