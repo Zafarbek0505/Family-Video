@@ -5,50 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Family Memories</title>
 <style>
-html, body {
-  margin: 0;
-  background: black;
-  font-family: Arial, sans-serif;
-}
-
-#start {
-  position: fixed;
-  inset: 0;
-  background: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-button {
-  font-size: 22px;
-  padding: 18px 40px;
-  border: 0;
-  border-radius: 40px;
-}
-
-video {
-  width: 100vw;
-  height: 100vh;
-  background: black;
-  display: none;
-}
-
-#gallery {
-  display: none;
-  background: #111;
-  padding: 10px;
-  columns: 3 250px;
-  column-gap: 10px;
-}
-
-#gallery img {
-  width: 100%;
-  margin-bottom: 10px;
-  border-radius: 12px;
-}
+html, body { margin:0; background:#111; font-family:Arial,sans-serif; }
+#start { position:fixed; inset:0; background:black; display:flex; align-items:center; justify-content:center; z-index:10; }
+button { font-size:22px; padding:18px 40px; border:0; border-radius:40px; }
+video { width:100vw; height:100vh; background:black; display:none; }
+#gallery { display:none; padding:10px; columns:3 250px; column-gap:10px; }
+#gallery img { width:100%; margin-bottom:10px; border-radius:12px; display:block; }
 </style>
 </head>
 <body>
@@ -64,58 +26,36 @@ video {
 <div id="gallery"></div>
 
 <script>
-const imageNames = [
-"4A4A0016-39.jpg",
-"4A4A0071-38.jpg",
-"4A4A0094-37.jpg",
-"4A4A0112-36.jpg",
-"4A4A0120-35.jpg",
-"4A4A0125-34.jpg",
-"4A4A0128-33.jpg",
-"4A4A0142-32.jpg",
-"4A4A0146-31.jpg",
-"4A4A0150-30.jpg",
-"4A4A0154-29.jpg",
-"4A4A0200-28.jpg",
-"4A4A0206-27.jpg",
-"4A4A0211-26.jpg",
-"4A4A0215-25.jpg",
-"4A4A0228-24.jpg",
-"4A4A0232-23.jpg",
-"4A4A0251-22.jpg",
-"4A4A0259-21.jpg"
-];
+const video = document.getElementById("video");
+const gallery = document.getElementById("gallery");
 
 function startVideo() {
-  const start = document.getElementById("start");
-  const video = document.getElementById("video");
-
-  start.style.display = "none";
+  document.getElementById("start").style.display = "none";
   video.style.display = "block";
   video.play();
-
-  if (video.requestFullscreen) {
-    video.requestFullscreen();
-  }
+  if (video.requestFullscreen) video.requestFullscreen();
 }
 
-document.getElementById("video").onended = function () {
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  }
-
-  this.style.display = "none";
-
-  const gallery = document.getElementById("gallery");
+async function showGallery() {
+  if (document.fullscreenElement) document.exitFullscreen();
+  video.style.display = "none";
   gallery.style.display = "block";
+  gallery.innerHTML = "";
 
-  imageNames.forEach(name => {
-    const img = document.createElement("img");
-    img.src = "./images/" + name;
-    img.loading = "lazy";
-    gallery.appendChild(img);
-  });
-};
+  const res = await fetch("https://api.github.com/repos/Zafarbek0505/Family-Video/contents/images");
+  const files = await res.json();
+
+  files
+    .filter(file => file.name.toLowerCase().endsWith(".jpg"))
+    .forEach(file => {
+      const img = document.createElement("img");
+      img.src = file.download_url;
+      img.loading = "lazy";
+      gallery.appendChild(img);
+    });
+}
+
+video.addEventListener("ended", showGallery);
 </script>
 
 </body>
