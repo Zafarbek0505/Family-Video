@@ -1,39 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-html,body{
-margin:0;
-background:black;
-overflow:hidden;
-}
-
-video{
-width:100vw;
-height:100vh;
-object-fit:cover;
-}
-</style>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Video</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100vw;
+      height: 100vh;
+      border: 0;
+    }
+  </style>
 </head>
-
 <body>
-
-<video
-autoplay
-muted
-playsinline
-controls="false">
-<source src="video.mp4" type="video/mp4">
-</video>
-
-<script>
-const video=document.querySelector("video");
-video.controls=false;
-video.play();
-</script>
-
+  <iframe
+    src="https://drive.google.com/file/d/1SgxP1wm___jvxcJtb_QF786vibVS1CJt/preview"
+    allow="autoplay; fullscreen"
+    allowfullscreen>
+  </iframe>
 </body>
 </html>
