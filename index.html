@@ -4,19 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Family Memories</title>
-
 <style>
-* {
+html, body {
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
   background: black;
   font-family: Arial, sans-serif;
 }
-
 #start {
   position: fixed;
   inset: 0;
@@ -27,83 +20,44 @@ body {
   justify-content: center;
   z-index: 10;
 }
-
-#start button {
+button {
   font-size: 22px;
   padding: 18px 40px;
-  border: none;
+  border: 0;
   border-radius: 40px;
-  background: white;
-  color: black;
 }
-
 video {
   width: 100vw;
   height: 100vh;
-  object-fit: contain;
   background: black;
   display: none;
 }
-
-#gallery {
-  display: none;
-  background: #111;
-  padding: 10px;
-  columns: 3 250px;
-  column-gap: 10px;
-}
-
-#gallery img {
-  width: 100%;
-  margin-bottom: 10px;
-  border-radius: 12px;
-}
 </style>
 </head>
-
 <body>
 
 <div id="start">
   <button onclick="startVideo()">Open Video</button>
 </div>
 
-<video id="video" playsinline>
- <source src="video.mp4.mp4" type="video/mp4">
+<video id="video" controls playsinline>
+  <source src="./video.mp4.mp4" type="video/mp4">
 </video>
 
-<div id="gallery"></div>
-
 <script>
-const video = document.getElementById("video");
-const start = document.getElementById("start");
-const gallery = document.getElementById("gallery");
-
 function startVideo() {
+  const start = document.getElementById("start");
+  const video = document.getElementById("video");
+
   start.style.display = "none";
   video.style.display = "block";
+
   video.play();
 
   if (video.requestFullscreen) {
     video.requestFullscreen();
   }
 }
-
-video.onended = async function () {
-  video.style.display = "none";
-  gallery.style.display = "block";
-
-  const res = await fetch("https://api.github.com/repos/Zafarbek0505/Family-Video/contents/images");
-  const files = await res.json();
-
-  files
-    .filter(file => file.name.toLowerCase().endsWith(".jpg"))
-    .forEach(file => {
-      const img = document.createElement("img");
-      img.src = file.download_url;
-      img.loading = "lazy";
-      gallery.appendChild(img);
-    });
-};
 </script>
 
 </body>
