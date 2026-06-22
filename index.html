@@ -1,29 +1,138 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Family Video</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    iframe {
-      width: 100vw;
-      height: 100vh;
-      border: 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Memories ❤️</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#000;
+font-family:Arial,Helvetica,sans-serif;
+overflow-x:hidden;
+}
+
+#start{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:black;
+z-index:9999;
+flex-direction:column;
+color:white;
+}
+
+button{
+padding:18px 45px;
+font-size:22px;
+border:none;
+border-radius:50px;
+cursor:pointer;
+background:#ff4081;
+color:white;
+}
+
+button:hover{
+background:#ff1f68;
+}
+
+video{
+width:100%;
+height:100vh;
+object-fit:contain;
+background:black;
+display:none;
+}
+
+#gallery{
+display:none;
+padding:10px;
+columns:3 250px;
+column-gap:10px;
+background:#111;
+}
+
+#gallery img{
+width:100%;
+margin-bottom:10px;
+border-radius:12px;
+display:block;
+transition:.3s;
+cursor:pointer;
+}
+
+#gallery img:hover{
+transform:scale(1.02);
+}
+</style>
+
 </head>
+
 <body>
-  <iframe
-    src="https://drive.google.com/file/d/1SgxP1wm___jvxcJtb_QF786vibVS1CJt/preview"
-    allow="autoplay; fullscreen"
-    allowfullscreen>
-  </iframe>
+
+<div id="start">
+<h1 style="margin-bottom:25px;">❤️ Family Memories ❤️</h1>
+
+<button onclick="playVideo()">
+Open Album
+</button>
+
+</div>
+
+<video id="video" controls autoplay>
+<source src="video.mp4">
+</video>
+
+<div id="gallery"></div>
+
+<script>
+
+const gallery=document.getElementById("gallery");
+
+for(let i=1;i<=105;i++){
+
+let img=document.createElement("img");
+
+img.src="images/"+i+".jpg";
+
+img.loading="lazy";
+
+gallery.appendChild(img);
+
+}
+
+function playVideo(){
+
+document.getElementById("start").style.display="none";
+
+let v=document.getElementById("video");
+
+v.style.display="block";
+
+v.play();
+
+}
+
+document.getElementById("video").onended=function(){
+
+this.style.display="none";
+
+gallery.style.display="block";
+
+}
+
+</script>
+
 </body>
 </html>
